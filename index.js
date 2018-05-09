@@ -130,4 +130,4 @@ module.exports = {
 }
 
 // var gitHistory = require('./index')
-// gitHistory.writeDirHistory(~"/Projects", "Rangel", new Date(2018, 03, 09), new Date(2018, 04, 01), "./history")
+// gitHistory.writeDirHistory("/Users/henrique-rangel/Projects", "Rangel", new Date(2018, 03, 09), new Date(2018, 04, 01), "./history")
