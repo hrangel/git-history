@@ -56,8 +56,10 @@ const getDirHistory = (source, author, dateStart, dateEnd) => {
   const allResults = [];
   return runOnGitDirs(source, dir => { 
     if (author) {
+      // return `cd "${dir}" && git log --shortstat --pretty="format:%h %ci %s" --abbrev-commit --after="${dateStart}" --before="${dateEnd}" --author="${author}"`;
       return `cd "${dir}" && git log --pretty="format:%h %ci %s" --abbrev-commit --after="${dateStart}" --before="${dateEnd}" --author="${author}"`;
     } else {
+      // return `cd "${dir}" && git log --shortstat --pretty="format:%h %ci %s" --abbrev-commit --after="${dateStart}" --before="${dateEnd}"`;
       return `cd "${dir}" && git log --pretty="format:%h %ci %s" --abbrev-commit --after="${dateStart}" --before="${dateEnd}"`;
     }
   }, (dir, stdout) => {
@@ -125,9 +127,19 @@ const writeDirHistory = (source, author, rangeStart, rangeEnd, folder) => {
   )
 };
 
+const writeHistory = (source, author, folder, daysBefore, daysAfter = 0) => {
+  const rangeStart = new Date();
+  rangeStart.setDate(rangeStart.getDate() - daysBefore);
+  const rangeEnd = new Date();
+  rangeEnd.setDate(rangeEnd.getDate() - daysAfter);
+  return writeDirHistory(source, author, rangeStart, rangeEnd, folder);
+}
+
 module.exports = {
-  writeDirHistory
+  writeDirHistory,
+  writeHistory
 }
 
 // var gitHistory = require('./index')
 // gitHistory.writeDirHistory("/Users/henrique-rangel/Projects", "Rangel", new Date(2018, 03, 09), new Date(2018, 04, 01), "./history")
+// gitHistory.writeHistory("/Users/henrique-rangel/Projects", "Rangel", "./history", 15)
