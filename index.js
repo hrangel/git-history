@@ -1,5 +1,6 @@
 const { lstatSync, readdirSync } = require('fs')
 const { join } = require('path')
+const moment = require('moment')
 const fs = require('fs');
 const { exec } = require('child_process');
 
@@ -104,9 +105,10 @@ const formatDate = (date) => {
 }
 
 const writeDirHistory = (source, author, rangeStart, rangeEnd, folder) => {
-  var currentDate = new Date(rangeStart.getTime());
+  var currentDate = new Date(rangeStart.getTime ? rangeStart.getTime() : moment(rangeStart).toDate().getTime());
+  var finalDate = new Date(rangeEnd.getTime ? rangeEnd.getTime() : moment(rangeEnd).toDate().getTime());
   var dates = [];
-  while (currentDate < rangeEnd) {
+  while (currentDate <= finalDate) {
     dates.push(currentDate);
     currentDate = new Date(currentDate.getTime());
     currentDate.setDate(currentDate.getDate()+1);
@@ -143,3 +145,8 @@ module.exports = {
 // var gitHistory = require('./index')
 // gitHistory.writeDirHistory("/Users/henrique-rangel/Projects", "Rangel", new Date(2018, 03, 09), new Date(2018, 04, 01), "./history")
 // gitHistory.writeHistory("/Users/henrique-rangel/Projects", "Rangel", "./history", 15)
+
+const params = process.argv ? process.argv.slice(2) : [];
+if (params && params.length == 2) {
+  writeDirHistory("/Users/henrique-rangel/Projects", "Rangel", params[0], params[1], "./history");
+}
